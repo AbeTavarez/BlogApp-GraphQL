@@ -1,9 +1,13 @@
 import React, {Component} from "react";
 import './DisplayPosts.css';
+import DeletePost from "../DeletePost/DeletePost";
+
+
 // import method 
 import { listPosts } from "../../graphql/queries";
 //imports the api
 import {API, graphqlOperation} from 'aws-amplify';
+import EditPost from "../EditPost/EditPost";
 
 class DisplayPosts extends Component {
 
@@ -35,6 +39,12 @@ class DisplayPosts extends Component {
                         <time className="time">{new Date(post.createdAt).toDateString()}</time>
                     </span>
                     <p>{post.postBody}</p>
+
+                    <br/>
+                    <span>
+                        <DeletePost />
+                        <EditPost />
+                    </span>
                 </div>
             )
         })
