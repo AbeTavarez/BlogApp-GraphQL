@@ -1,0 +1,16 @@
+.rowStyle {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px #ccc dotted;
+    margin: 14px;
+}
+
+.time {
+    font-style: italic;
+    color: #4ca5e297;
+}
+
+.wrote-by {
+    font-style: italic;
+    color: cornflowerblue;
+}

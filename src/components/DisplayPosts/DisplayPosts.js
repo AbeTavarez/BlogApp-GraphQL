@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import './DisplayPosts.css';
 // import method 
 import { listPosts } from "../../graphql/queries";
 //imports the api
@@ -25,13 +26,13 @@ class DisplayPosts extends Component {
         const { posts } = this.state;
         return posts.map(post => {
             return (
-                <div className="posts" key={post.id}>
+                <div className="posts rowStyle" key={post.id}>
                     <h1>{post.postTitle}</h1>
-                    <span>
+                    <span className="wrote-by">
                         {"Wrote by: "} {post.postOwnerUsername}
                         {" on "}
                         {" "}
-                        <time>{new Date(post.createdAt).toDateString()}</time>
+                        <time className="time">{new Date(post.createdAt).toDateString()}</time>
                     </span>
                     <p>{post.postBody}</p>
                 </div>
