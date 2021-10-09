@@ -1,6 +1,9 @@
 import './App.css';
 import CreatePost from './components/CreatePost/CreatePost';
 import DisplayPosts from './components/DisplayPosts/DisplayPosts';
+import { withAuthenticator } from 'aws-amplify-react'; // or 'aws-amplify-react-native';
+
+export default withAuthenticator(App);}
 
 function App() {
   return (
@@ -11,4 +14,4 @@ function App() {
   );
 }
 
-export default App;
+export default withAuthenticator(App);
