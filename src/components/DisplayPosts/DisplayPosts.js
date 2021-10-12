@@ -29,7 +29,7 @@ class DisplayPosts extends Component {
                 // newPost is created from postData
                 const newPost = postData.value.data.onCreatePost
                 // gets the prevPosts and makes sure the newPost is not in the array
-                const prevPost = this.state.posts.filter(post => post.id != newPost.id)
+                const prevPost = this.state.posts.filter(post => post.id !== newPost.id)
                 // create new array of posts (new posts first then prevPosts)
                 const updatedPosts = [newPost, ...prevPost]
                 this.setState({posts: updatedPosts})
