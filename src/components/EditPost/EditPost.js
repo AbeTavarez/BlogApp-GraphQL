@@ -1,5 +1,7 @@
+import API, {graphqlOperation} from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
 import { Component } from "react";
+import { updatePost } from "../../graphql/mutations";
 
 class EditPost extends Component {
 
@@ -12,7 +14,7 @@ class EditPost extends Component {
         postBody: "",
         postData: {
             postTitle: this.props.postTitle,
-            postBody: this.props.postTitle
+            postBody: this.props.postBody
         }
     }
 
@@ -20,6 +22,34 @@ class EditPost extends Component {
         this.setState({show: !this.state.show})
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
+    }
+
+    handleTitle = e => {
+        this.setState({
+            postData: {...this.state.postData, postTitle: e.target.value}
+        })
+    }
+
+    handleBody = e => {
+        this.setState({
+            postData: {...this.state.postData, postBody: e.target.value}
+        })
+    }
+
+    handleUpdatePost = async e => {
+        e.preventDefault();
+
+        const input = {
+            id: this.props.id,
+            postOwnerId: this.state.postOwnerId,
+            postOwnerUsername: this.state.postOwnerUsername,
+            postTitle: this.state.postData.postTitle,
+            postBody: this.state.postData.postBody
+        }
+
+        await API.graphql(graphqlOperation(updatePost, { input }))
+
+        this.setState({ show: !this.state.show})
     }
 
     componentWillMount = async () => {
