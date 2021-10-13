@@ -8,8 +8,11 @@ import { listPosts } from "../../graphql/queries";
 //imports the api
 import {API, graphqlOperation} from 'aws-amplify';
 import EditPost from "../EditPost/EditPost";
-import { onCreatePost, onDeletePost } from "../../graphql/subscriptions";
-import { deletePost } from "../../graphql/mutations";
+import { onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
+import { deletePost, updatePost } from "../../graphql/mutations";
+//*==================
+import { Container, Avatar } from "@mui/material";
+
 
 class DisplayPosts extends Component {
 
@@ -20,7 +23,7 @@ class DisplayPosts extends Component {
     componentDidMount = async () => {
         this.getPosts();
 
-        //* ============ CreatePostListener
+        //* ============ CreatePost Listener
         // This listener will run when a new post is created 
         this.createPostListener = API.graphql(graphqlOperation(onCreatePost))
         .subscribe({
@@ -35,7 +38,9 @@ class DisplayPosts extends Component {
                 this.setState({posts: updatedPosts})
             }
         })
-        //* =========== DeletePostListener
+
+
+        //* =========== DeletePost Listener
         // This listener will run when a post is deleted
         this.deletePostListener = API.graphql(graphqlOperation(onDeletePost))
             .subscribe({
@@ -47,11 +52,31 @@ class DisplayPosts extends Component {
                     this.setState({posts: updatedPosts})
                 }
             })
+
+
+        //* ========== UpdatePost Listener
+        this.updatePostListener = API.graphql(graphqlOperation(onUpdatePost))
+            .subscribe({
+                next: postData => {
+                    const { posts } = this.state
+                    const updatePost = postData.value.data.onUpdatePost
+                    const index = posts.findIndex(post => post.id === updatePost.id)
+
+                    const updatePosts = [
+                        ...posts.slice(0, index),
+                        updatePost,
+                        ...posts.slice(index + 1)
+                    ]
+
+                    this.setState({ posts: updatePosts})
+                }
+            })
     };
 
     componentWillUnmount(){
         this.createPostListener.unsubscribe()
         this.deletePostListener.unsubscribe()
+        this.updatePostListener.unsubscribe()
     }
 
     getPosts = async () => {
@@ -65,7 +90,12 @@ class DisplayPosts extends Component {
         const { posts } = this.state;
         return posts.map(post => {
             return (
-                <div className="posts rowStyle" key={post.id}>
+                <Container maxWidth="sm" className="posts rowStyle" key={post.id}>
+                    <div>
+                    <Avatar alt="Remy Sharp" src="https://cdn.fordhamram.com/wp-content/uploads/amongus-512x375.png" />
+                        <h3>{post.postOwnerUsername}</h3>
+                    </div>
+                    <img style={{maxHeight: 300, maxWidth: 300}} src="https://jw-webmagazine.com/wp-content/uploads/2020/03/Kimetsu-no-YaibaDemon-Slayer.jpg"/>
                     <h1>{post.postTitle}</h1>
                     <span className="wrote-by">
                         {"Wrote by: "} {post.postOwnerUsername}
@@ -73,14 +103,17 @@ class DisplayPosts extends Component {
                         {" "}
                         <time className="time">{new Date(post.createdAt).toDateString()}</time>
                     </span>
-                    <p>{post.postBody}</p>
+                   <div>
+                        <h3>{post.postOwnerUsername}</h3>
+                        <p>{post.postBody}</p>
+                    </div>
 
                     <br/>
                     <span>
                         <DeletePost data={post}/>
-                        <EditPost />
+                        <EditPost {...post}/>
                     </span>
-                </div>
+                </Container>
             )
         })
     }

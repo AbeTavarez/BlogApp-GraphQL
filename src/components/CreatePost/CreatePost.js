@@ -1,5 +1,6 @@
 import API, { graphqlOperation } from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
+import { Button, TextareaAutosize, TextField, FormControl } from "@mui/material";
 import { Component } from "react";
 import { createPost } from "../../graphql/mutations";
 
@@ -49,15 +50,15 @@ class CreatePost extends Component {
 
   render() {
     return (
-      <form className="add-post" onSubmit={this.handleAddPost}>
-        <input
+      <FormControl className="add-post" onSubmit={this.handleAddPost}>
+        <TextField
           type="text"
           name="postTitle"
           required
           value={this.state.postTitle}
           onChange={this.handleChangePost}
         />
-        <textarea
+        <TextareaAutosize
           type="text"
           name="postBody"
           rows="3"
@@ -67,8 +68,9 @@ class CreatePost extends Component {
           value={this.state.postBody}
           onChange={this.handleChangePost}
         />
-        <input type="submit" className="btn" />
-      </form>
+        {/* <input type="submit" className="btn" /> */}
+        <Button type="submit">Post</Button>
+      </FormControl>
     );
   }
 }

@@ -2,6 +2,11 @@ import API, {graphqlOperation} from "@aws-amplify/api";
 import { Component } from "react";
 import { deletePost } from "../../graphql/mutations";
 
+
+
+//* ========= Materialize UI
+import Button from '@mui/material/Button';
+
 class DeletePost extends Component {
 
     handleDeletePost = async postId => {
@@ -15,7 +20,7 @@ class DeletePost extends Component {
     render() {
         const post = this.props.data
         return(
-            <button onClick={() => this.handleDeletePost(post.id)}>Delete Post</button>
+            <Button variant="text" onClick={() => this.handleDeletePost(post.id)}>Delete Post</Button>
         )
     }
 }

@@ -1,5 +1,6 @@
 import API, {graphqlOperation} from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
+import Button  from "@mui/material/Button";
 import { Component } from "react";
 import { updatePost } from "../../graphql/mutations";
 
@@ -102,7 +103,7 @@ class EditPost extends Component {
 
                 }
 
-                <button onClick={this.handleModal}>Edit</button>
+                <Button onClick={this.handleModal}>Edit</Button>
             </>
         )
     }
