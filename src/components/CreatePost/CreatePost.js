@@ -1,6 +1,6 @@
 import API, { graphqlOperation } from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
-import { Button, TextareaAutosize, TextField, FormControl } from "@mui/material";
+import { Button, TextareaAutosize, TextField, FormControl, Input, Container } from "@mui/material";
 import { Component } from "react";
 import { createPost } from "../../graphql/mutations";
 
@@ -35,7 +35,7 @@ class CreatePost extends Component {
 
   handleAddPost = async (event) => {
     event.preventDefault();
-
+    // create new input data object with all the data we need to send
     const input = {
       postOwnerId: this.state.postOwnerId,
       postOwnerUsername: this.state.postOwnerUsername,
@@ -43,6 +43,7 @@ class CreatePost extends Component {
       postBody: this.state.postBody,
       createdAt: new Date().toISOString
     };
+    // calls the api with the createPost mutation and the input object
     await API.graphql(graphqlOperation(createPost, { input }));
 
     this.setState({ postTitle: "", postBody: "" });
@@ -50,7 +51,8 @@ class CreatePost extends Component {
 
   render() {
     return (
-      <FormControl className="add-post" onSubmit={this.handleAddPost}>
+     <Container maxWidth="sm">
+        <form className="add-post" onSubmit={this.handleAddPost}>
         <TextField
           type="text"
           name="postTitle"
@@ -68,9 +70,10 @@ class CreatePost extends Component {
           value={this.state.postBody}
           onChange={this.handleChangePost}
         />
-        {/* <input type="submit" className="btn" /> */}
-        <Button type="submit">Post</Button>
-      </FormControl>
+        <Input type="submit" className="btn" />
+
+      </form>
+     </Container>
     );
   }
 }

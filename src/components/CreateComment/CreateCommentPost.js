@@ -1,7 +1,9 @@
-import API from "@aws-amplify/api";
-import Auth from "@aws-amplify/auth";
-import { Input, TextareaAutosize, FormControl } from "@mui/material";
 import React, { Component }from "react";
+import API, { graphqlOperation } from "@aws-amplify/api";
+import Auth from "@aws-amplify/auth";
+import { createComment } from "../../graphql/mutations";
+import { Input, TextareaAutosize, FormControl, Button } from "@mui/material";
+
 
 
 class CreateCommentPost extends Component {
@@ -13,7 +15,7 @@ class CreateCommentPost extends Component {
     }
 
     
-    componentWillUnmount = async => {
+    componentWillMount = async () => {
         // fetches user info from backend
         await Auth.currentUserInfo()
             .then(user => {
@@ -47,7 +49,7 @@ class CreateCommentPost extends Component {
     render() {
         return (
             <div>
-                <FormControl onSubmit={this.handleAddComment}>
+                <form onSubmit={this.handleAddComment}>
                     <TextareaAutosize
                         type="text"
                         name="content"
@@ -58,8 +60,9 @@ class CreateCommentPost extends Component {
                         onChange={this.handleChangeContent}
                     >
                     </TextareaAutosize>
-                    <Input value="comment" />
-                </FormControl>
+                    <Input type="submit" value="comment"/>
+                    
+                </form>
             </div>
         )
     }

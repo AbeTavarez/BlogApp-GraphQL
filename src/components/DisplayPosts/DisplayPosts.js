@@ -10,8 +10,14 @@ import {API, graphqlOperation} from 'aws-amplify';
 import EditPost from "../EditPost/EditPost";
 import { onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
 import { deletePost, updatePost } from "../../graphql/mutations";
+import CreateCommentPost from "../CreateComment/CreateCommentPost";
+
+
+
+
 //*==================
 import { Container, Avatar } from "@mui/material";
+
 
 
 class DisplayPosts extends Component {
@@ -112,6 +118,9 @@ class DisplayPosts extends Component {
                     <span>
                         <DeletePost data={post}/>
                         <EditPost {...post}/>
+                    </span>
+                    <span>
+                        <CreateCommentPost postId={post.id} />
                     </span>
                 </Container>
             )
