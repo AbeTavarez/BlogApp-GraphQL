@@ -62,7 +62,7 @@ class CreatePost extends Component {
           type="text"
           name="postBody"
           rows="3"
-          cols="40"
+          cols="20"
           placeholder="New Blog Post"
           required
           value={this.state.postBody}
