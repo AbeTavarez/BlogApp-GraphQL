@@ -8,7 +8,7 @@ import { listPosts } from "../../graphql/queries";
 //imports the api
 import {API, graphqlOperation} from 'aws-amplify';
 import EditPost from "../EditPost/EditPost";
-import { onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
+import { onCreateComment, onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
 import { deletePost, updatePost } from "../../graphql/mutations";
 import CreateCommentPost from "../CreateComment/CreateCommentPost";
 
@@ -77,12 +77,31 @@ class DisplayPosts extends Component {
                     this.setState({ posts: updatePosts})
                 }
             })
+
+        //* ========== CreateComment Listener
+        this.createCommentListener = API.graphql(graphqlOperation(onCreateComment))
+            .subscribe({
+                next: commentData => {
+                    const createdComment = commentData.value.data.onCreateComment
+                    let posts = [...this.state.posts]
+
+                    for (let post of posts) {
+                        if (createdComment.post.id === post.id) {
+                            post.comments.items.push(createdComment)
+                        }
+                    }
+                    this.setState({ posts })
+                }
+            })
     };
+
+    
 
     componentWillUnmount(){
         this.createPostListener.unsubscribe()
         this.deletePostListener.unsubscribe()
         this.updatePostListener.unsubscribe()
+        this.createCommentListener.unsubscribe()
     }
 
     getPosts = async () => {
