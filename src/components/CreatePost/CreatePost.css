@@ -1,3 +1,9 @@
 form input {
-    font-size: 19px;
+    /* font-size: 19px; */
+}
+
+.create-post-container {
+    /* background-color: brown; */
+    display: flex;
+    flex-direction: column;
 }

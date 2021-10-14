@@ -3,6 +3,7 @@ import Auth from "@aws-amplify/auth";
 import { Button, TextareaAutosize, TextField, FormControl, Input, Container } from "@mui/material";
 import { Component } from "react";
 import { createPost } from "../../graphql/mutations";
+import "./CreatePost.css"
 
 class CreatePost extends Component {
   state = {
@@ -51,7 +52,7 @@ class CreatePost extends Component {
 
   render() {
     return (
-     <Container maxWidth="sm">
+     <Container  maxWidth="sm" className="create-post-container">
         <form className="add-post" onSubmit={this.handleAddPost}>
         <TextField
           type="text"
