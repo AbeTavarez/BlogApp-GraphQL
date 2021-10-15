@@ -17,6 +17,7 @@ import CreateCommentPost from "../CreateComment/CreateCommentPost";
 
 //*==================
 import { Container, Avatar } from "@mui/material";
+import CommentPost from "../CommentPost/CommentPost";
 
 
 
@@ -115,9 +116,9 @@ class DisplayPosts extends Component {
         const { posts } = this.state;
         return posts.map(post => {
             return (
-                <Container maxWidth="sm" className="posts rowStyle" key={post.id}>
+                <Container maxWidth="md" className="posts rowStyle" key={post.id}>
                     <div>
-                    <Avatar alt="Remy Sharp" src="https://cdn.fordhamram.com/wp-content/uploads/amongus-512x375.png" />
+                    <Avatar alt="" src="https://cdn.fordhamram.com/wp-content/uploads/amongus-512x375.png" />
                         <h3>{post.postOwnerUsername}</h3>
                     </div>
                     <img style={{maxHeight: 300, maxWidth: 300}} src="https://jw-webmagazine.com/wp-content/uploads/2020/03/Kimetsu-no-YaibaDemon-Slayer.jpg"/>
@@ -140,6 +141,12 @@ class DisplayPosts extends Component {
                     </span>
                     <span>
                         <CreateCommentPost postId={post.id} />
+
+                        { post.comments.items.length > 0 && <span style={{fontSize:"19px"}}>Comments: </span> }
+                        
+                        {
+                            post.comments.items.map((comment, index) => <CommentPost key={index} commentData={comment} />)
+                        }
                     </span>
                 </Container>
             )

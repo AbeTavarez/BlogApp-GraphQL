@@ -1,0 +1,11 @@
+.cont {
+    /* background-color: burlywood; */
+    display: flex;
+    justify-items: center;
+    padding: 0.5rem;
+}
+
+.comment-username{
+    padding-right: 0.5rem;
+    font-weight: 500;
+}

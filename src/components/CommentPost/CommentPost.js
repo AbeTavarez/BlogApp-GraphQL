@@ -1,4 +1,6 @@
-import { Component } from "react";
+import { Container } from "@mui/material";
+import React, { Component } from "react";
+import "./CommentPost.css";
 
 
 class CommentPost extends Component {
@@ -6,17 +8,14 @@ class CommentPost extends Component {
 
     render() {
 
-        const {content, commentOwnerUsername, createdAt}
-        return(
-            <div>
-                <span>
-                    {commentOwnerUsername}
-                </span>
+        const { content, commentOwnerUsername, createdAt } = this.props.commentData;
 
-                <p>
-                    {content}
-                </p>
-            </div>
+        return(
+            <Container className="cont">
+                <div className="comment-username">{commentOwnerUsername}:</div> {" "}
+                {/* <time>{new Date(createdAt).toDateString()}</time> */}
+                <div>{content}</div>
+            </Container>
         )
     }
 }

@@ -4,6 +4,9 @@ form input {
 
 .create-post-container {
     /* background-color: brown; */
+}
+
+form {
     display: flex;
     flex-direction: column;
 }

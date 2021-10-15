@@ -2,7 +2,7 @@ import React, { Component }from "react";
 import API, { graphqlOperation } from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
 import { createComment } from "../../graphql/mutations";
-import { Input, TextareaAutosize, FormControl, Button } from "@mui/material";
+import { Input, TextareaAutosize, FormControl, Button, Container } from "@mui/material";
 
 
 
@@ -48,7 +48,7 @@ class CreateCommentPost extends Component {
 
     render() {
         return (
-            <div>
+            <Container>
                 <form onSubmit={this.handleAddComment}>
                     <TextareaAutosize
                         type="text"
@@ -63,7 +63,7 @@ class CreateCommentPost extends Component {
                     <Input type="submit" value="comment"/>
                     
                 </form>
-            </div>
+            </Container>
         )
     }
 }
