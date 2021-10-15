@@ -6,7 +6,7 @@ import DeletePost from "../DeletePost/DeletePost";
 // import method 
 import { listPosts } from "../../graphql/queries";
 //imports the api
-import {API, graphqlOperation} from 'aws-amplify';
+import {API, graphqlOperation, Auth} from 'aws-amplify';
 import EditPost from "../EditPost/EditPost";
 import { onCreateComment, onCreateLike, onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
 import { deletePost, updatePost } from "../../graphql/mutations";
@@ -32,6 +32,14 @@ class DisplayPosts extends Component {
 
     componentDidMount = async () => {
         this.getPosts();
+
+        await Auth.currentUserInfo()
+            .then( user => {
+                this.setState({
+                    ownerId: user.attributes.sub,
+                    ownerUsername: user.username
+                })
+            })
 
         //* ============ CreatePost Listener
         // This listener will run when a new post is created 
@@ -130,6 +138,21 @@ class DisplayPosts extends Component {
         this.setState({posts: result.data.listPosts.items})
 
         //console.log(`All Posts: `, result.data.listPosts.items);
+    }
+
+    likedPost = postId => {
+        for (let post of this.state.posts) {
+            if (post.id === postId){
+                if (post.postOwnerId === this.state.ownerId) return true;
+                
+                for (let like of post.likes.items){
+                    if (like.likeOwnerId === this.state.ownerId){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
     
     render() {
