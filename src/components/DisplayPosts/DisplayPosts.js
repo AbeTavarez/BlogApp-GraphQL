@@ -8,11 +8,11 @@ import { listPosts } from "../../graphql/queries";
 //imports the api
 import {API, graphqlOperation} from 'aws-amplify';
 import EditPost from "../EditPost/EditPost";
-import { onCreateComment, onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
+import { onCreateComment, onCreateLike, onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
 import { deletePost, updatePost } from "../../graphql/mutations";
 import CreateCommentPost from "../CreateComment/CreateCommentPost";
 
-
+import { FaThumbsUp, FaHeart } from 'react-icons/fa';
 
 
 //*==================
@@ -24,6 +24,9 @@ import CommentPost from "../CommentPost/CommentPost";
 class DisplayPosts extends Component {
 
     state = {
+        ownerId: "",
+        ownerUsername: "",
+        isHovering: false,
         posts: []
     }
 
@@ -94,6 +97,22 @@ class DisplayPosts extends Component {
                     this.setState({ posts })
                 }
             })
+
+        //* ========= CreatePostLike Listener
+        this.createPostLikeListener = API.graphql(graphqlOperation(onCreateLike))
+            .subscribe({
+                next: postData => {
+                    const createdLike = postData.value.data.onCreateLike
+
+                    let posts = [...this.state,posts]
+                    for (let post of posts) {
+                        if (createdLike.post.id === post.id) {
+                            post.likes.items.push(createdLike)
+                        }
+                    }
+                    this.setState({ posts })
+                }
+            })
     };
 
     
@@ -103,6 +122,7 @@ class DisplayPosts extends Component {
         this.deletePostListener.unsubscribe()
         this.updatePostListener.unsubscribe()
         this.createCommentListener.unsubscribe()
+        this.createPostLikeListener.unsubscribe()
     }
 
     getPosts = async () => {
@@ -148,6 +168,8 @@ class DisplayPosts extends Component {
                             post.comments.items.map((comment, index) => <CommentPost key={index} commentData={comment} />)
                         }
                     </span>
+
+                    
                 </Container>
             )
         })
