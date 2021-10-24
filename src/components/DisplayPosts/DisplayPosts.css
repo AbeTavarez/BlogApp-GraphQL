@@ -14,3 +14,12 @@
     font-style: italic;
     color: cornflowerblue;
 }
+
+.like-container {
+    display: flex;
+    align-items: center;
+}
+
+.like-container p {
+    margin-right: 0.5rem;
+}

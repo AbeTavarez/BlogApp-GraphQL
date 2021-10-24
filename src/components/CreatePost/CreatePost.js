@@ -57,16 +57,17 @@ class CreatePost extends Component {
         <TextField
           type="text"
           name="postTitle"
+          placeholder="Post title"
           required
           value={this.state.postTitle}
           onChange={this.handleChangePost}
         />
-        <TextareaAutosize
+        <TextField
           type="text"
           name="postBody"
           rows="3"
           cols="20"
-          placeholder="New Blog Post"
+          placeholder="Post content"
           required
           value={this.state.postBody}
           onChange={this.handleChangePost}

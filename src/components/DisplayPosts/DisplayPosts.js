@@ -9,7 +9,7 @@ import { listPosts } from "../../graphql/queries";
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import EditPost from "../EditPost/EditPost";
 import { onCreateComment, onCreateLike, onCreatePost, onDeletePost, onUpdatePost } from "../../graphql/subscriptions";
-import { deletePost, updatePost } from "../../graphql/mutations";
+import { createLike, deletePost, updatePost } from "../../graphql/mutations";
 import CreateCommentPost from "../CreateComment/CreateCommentPost";
 
 import { FaThumbsUp, FaHeart } from 'react-icons/fa';
@@ -26,6 +26,8 @@ class DisplayPosts extends Component {
     state = {
         ownerId: "",
         ownerUsername: "",
+        errorMessage: "",
+        postLikedBy: [],
         isHovering: false,
         posts: []
     }
@@ -111,8 +113,8 @@ class DisplayPosts extends Component {
             .subscribe({
                 next: postData => {
                     const createdLike = postData.value.data.onCreateLike
+                    let posts = [...this.state.posts]
 
-                    let posts = [...this.state,posts]
                     for (let post of posts) {
                         if (createdLike.post.id === post.id) {
                             post.likes.items.push(createdLike)
@@ -154,9 +156,28 @@ class DisplayPosts extends Component {
         }
         return false;
     }
+
+    handleLike = async postId => {
+        const input = {
+            numberLikes: 1,
+            likeOwnerId: this.state.ownerId,
+            likeOwnerUsername: this.state.ownerUsername,
+            likePostId: postId
+        }
+
+        try {
+            const result = await API.graphql(graphqlOperation(createLike, {input}))
+            console.log(`Liked: `, result.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
     
     render() {
         const { posts } = this.state;
+
+        let loggedInUser = this.state.ownerId;
+
         return posts.map(post => {
             return (
                 <Container maxWidth="md" className="posts rowStyle" key={post.id}>
@@ -179,8 +200,21 @@ class DisplayPosts extends Component {
 
                     <br/>
                     <span>
-                        <DeletePost data={post}/>
-                        <EditPost {...post}/>
+                        { post.postOwnerId === loggedInUser &&
+                            <DeletePost data={post}/>
+                        }
+
+                        { post.postOwnerId === loggedInUser &&
+                            <EditPost {...post}/>
+                        }
+
+                        <span className="like-container">
+                            <p onClick={() => this.handleLike(post.id)}><FaThumbsUp /></p>
+
+                            {/* number of likes */}
+                            { post.likes.items.length }
+
+                        </span>
                     </span>
                     <span>
                         <CreateCommentPost postId={post.id} />
