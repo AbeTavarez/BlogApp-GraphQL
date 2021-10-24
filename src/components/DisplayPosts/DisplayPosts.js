@@ -16,8 +16,9 @@ import {
 } from "../../graphql/subscriptions";
 import { createLike, deletePost, updatePost } from "../../graphql/mutations";
 import CreateCommentPost from "../CreateComment/CreateCommentPost";
+import UserWhoLikedPost from "../UserWhoLikedPost/UserWhoLikedPost";
 
-import { FaThumbsUp, FaHeart } from "react-icons/fa";
+import { FaThumbsUp, FaSadTear } from "react-icons/fa";
 
 //*==================
 import { Container, Avatar } from "@mui/material";
@@ -258,11 +259,20 @@ class DisplayPosts extends Component {
                 {post.postOwnerId === loggedInUser && this.state.errorMessage}
               </p>
 
-              <p
+              <p className="like-button"
+                style={{color: (post.likes.items.length > 0) ? "blue" : "grey"}}
                 onMouseEnter={() => this.handleMouseHover(post.id)}
                 onMouseLeave={() => this.onMouseHoverLeave()}
                 onClick={() => this.handleLike(post.id)}>
                 <FaThumbsUp />
+
+                {
+                    this.state.isHovering && 
+                    <div className="user-liked">
+                        {this.state.postLikedBy.length === 0 ? "No likes Yet" : "Liked by "}
+                        {this.state.postLikedBy.length === 0 ? <FaSadTear /> : <UserWhoLikedPost data={this.state.postLikedBy} />}
+                    </div>    
+                }
               </p>
 
               {/* number of likes */}
